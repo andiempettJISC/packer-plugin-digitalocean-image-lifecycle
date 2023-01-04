@@ -82,7 +82,8 @@ release:
   #- glob: ./docs.zip
 
 changelog:
-  skip: true
+  skip: false
+  use: github
 announce:
   twitter:
     # Whether its enabled or not.
