@@ -8,7 +8,7 @@ build {
   sources = ["sources.null.basic-example"]
 
   post-processor "digitalocean-image-lifecycle" {
-    name_prefix = "mpz-ubuntu-18-04-x64-main-mysql"
+    name_prefix = "example-image"
     days_older_than = 9
   }
 }
