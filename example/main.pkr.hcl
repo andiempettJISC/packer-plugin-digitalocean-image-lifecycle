@@ -1,4 +1,13 @@
-packer {}
+// In development comment out the `required_plugins` block 
+// and move the built go binary to the example folder to use
+packer {
+  required_plugins {
+    digitalocean-image-lifecycle = {
+      version = ">=v0.1.5"
+      source  = "github.com/androidwiltron/digitalocean-image-lifecycle"
+    }
+  }
+}
 
 source "null" "basic-example" {
   communicator = "none"
