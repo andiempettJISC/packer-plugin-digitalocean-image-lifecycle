@@ -81,7 +81,7 @@ func (p *PostProcessor) PostProcess(ctx context.Context, ui packersdk.Ui, source
     }
 
 	if len(filteredImages) < 1 {
-		ui.Message("no images found")
+		ui.Message("no images found with the specified parameters provided")
 	}
 
 	for _, image := range filteredImages {
@@ -93,7 +93,17 @@ func (p *PostProcessor) PostProcess(ctx context.Context, ui packersdk.Ui, source
 			}
 			
 			ui.Say(fmt.Sprintf("Deleting image: %v", string(jsonOut)))
-        }
+
+			response, err := client.Images.Delete(ctx, image.ID)
+			if err != nil {
+				return source, true, true, err
+			}
+			if response.StatusCode == 204 {
+				ui.Message(fmt.Sprintf("Deleted image id: %d", image.ID))
+			}
+        } else {
+			ui.Message(fmt.Sprintf("Image with the id: %d is not older than %d days. skipping...", image.ID, p.config.Days))
+		}
     }
 
 	return source, true, true, err
