@@ -21,7 +21,8 @@ import (
 type Config struct {
 	common.PackerConfig `mapstructure:",squash"`
 	NamePrefix			string `mapstructure:"name_prefix"`
-	Days				int`mapstructure:"days_older_than"` 
+	Days				int `mapstructure:"days_older_than"`
+	DryRun				bool `mapstructure:"dry_run"`
 	ctx                 interpolate.Context
 }
 
@@ -69,7 +70,7 @@ func (p *PostProcessor) PostProcess(ctx context.Context, ui packersdk.Ui, source
 	
     client := godo.NewFromToken(do_token)
 
-	images, _, err := client.Images.ListUser(ctx, &godo.ListOptions{})
+	images, _, err := client.Images.ListUser(ctx, &godo.ListOptions{Page: 1, PerPage: 200})
 
 	var filteredImages []godo.Image
 
@@ -93,13 +94,17 @@ func (p *PostProcessor) PostProcess(ctx context.Context, ui packersdk.Ui, source
 			}
 			
 			ui.Say(fmt.Sprintf("Deleting image: %v", string(jsonOut)))
-
-			response, err := client.Images.Delete(ctx, image.ID)
-			if err != nil {
-				return source, true, true, err
-			}
-			if response.StatusCode == 204 {
-				ui.Message(fmt.Sprintf("Deleted image id: %d", image.ID))
+			
+			if p.config.DryRun {
+				ui.Message("'dry_run' enabled. Image not deleted...")
+			} else {
+				response, err := client.Images.Delete(ctx, image.ID)
+				if err != nil {
+					return source, true, true, err
+				}
+				if response.StatusCode == 204 {
+					ui.Message(fmt.Sprintf("Deleted image id: %d", image.ID))
+				}
 			}
         } else {
 			ui.Message(fmt.Sprintf("Image with the id: %d is not older than %d days. skipping...", image.ID, p.config.Days))

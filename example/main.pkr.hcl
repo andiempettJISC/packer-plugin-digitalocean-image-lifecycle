@@ -17,7 +17,8 @@ build {
   sources = ["sources.null.basic-example"]
 
   post-processor "digitalocean-image-lifecycle" {
-    name_prefix = "example-image"
+    name_prefix     = "example-image"
     days_older_than = 9
+    dry_run         = false
   }
 }
