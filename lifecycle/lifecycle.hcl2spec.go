@@ -20,6 +20,7 @@ type FlatConfig struct {
 	PackerSensitiveVars []string          `mapstructure:"packer_sensitive_variables" cty:"packer_sensitive_variables" hcl:"packer_sensitive_variables"`
 	NamePrefix          *string           `mapstructure:"name_prefix" cty:"name_prefix" hcl:"name_prefix"`
 	Days                *int              `mapstructure:"days_older_than" cty:"days_older_than" hcl:"days_older_than"`
+	DryRun              *bool             `mapstructure:"dry_run" cty:"dry_run" hcl:"dry_run"`
 }
 
 // FlatMapstructure returns a new FlatConfig.
@@ -44,6 +45,7 @@ func (*FlatConfig) HCL2Spec() map[string]hcldec.Spec {
 		"packer_sensitive_variables": &hcldec.AttrSpec{Name: "packer_sensitive_variables", Type: cty.List(cty.String), Required: false},
 		"name_prefix":                &hcldec.AttrSpec{Name: "name_prefix", Type: cty.String, Required: false},
 		"days_older_than":            &hcldec.AttrSpec{Name: "days_older_than", Type: cty.Number, Required: false},
+		"dry_run":                    &hcldec.AttrSpec{Name: "dry_run", Type: cty.Bool, Required: false},
 	}
 	return s
 }
