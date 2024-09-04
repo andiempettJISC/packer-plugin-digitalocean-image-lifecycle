@@ -13,7 +13,7 @@ packer {
   required_plugins {
     digitalocean-image-lifecycle = {
       version = ">=v1.0.0"
-      source  = "github.com/androidwiltron/digitalocean-image-lifecycle"
+      source  = "github.com/andiempettJISC/digitalocean-image-lifecycle"
     }
   }
 }
