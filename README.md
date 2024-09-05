@@ -61,6 +61,7 @@ cd example
 packer init .
 packer build .
 ```
+<<<<<<< HEAD
 
 
 ### If you're up to this for the first time, ensure you've got `Go` set up
@@ -97,3 +98,5 @@ Running `goreleaser` requires a Git tag to be populated, as that value is used t
 To test a plugin, run `<path_to_the_plugin> describe` - that should return a JSON block with its _description_, e.g. `version`.
 
 The Packer plugin can be then validated with Packer by running `packer plugins install -path <path_to_the_generate_plugin> "github.com/zestia/digitalocean-image-lifecycle"` - it also does a `describe` but also confirms all is valid for a Packer plugin.
+=======
+>>>>>>> 52cb53695a733c333c89dd49e15b4bfb3de77147
