@@ -13,7 +13,7 @@ packer {
   required_plugins {
     digitalocean-image-lifecycle = {
       version = ">=v1.0.0"
-      source  = "github.com/androidwiltron/digitalocean-image-lifecycle"
+      source  = "github.com/andiempettJISC/digitalocean-image-lifecycle"
     }
   }
 }
@@ -61,3 +61,39 @@ cd example
 packer init .
 packer build .
 ```
+
+
+### If you're up to this for the first time, ensure you've got `Go` set up
+
+```
+brew install go
+brew install goreleaser
+```
+
+For a missing `packer-sdc` command, run the below command.
+```
+go install github.com/hashicorp/packer-plugin-sdk/cmd/packer-sdc@latest
+# if not done before, add the your go/bin to your PATH to be able to run Go commands:
+export PATH=$PATH:$HOME/go/bin
+```
+
+For missing dependencies:
+```
+go mod tidy
+```
+
+When trying `goreleaser` or `go build` locally, a few variables have to be set locally, too. Variables can be checked by running `go env <variable_name>` (e.g. `go env GOOS`.)
+```
+export API_VERSION=$(go run . describe | jq -r '.api_version')
+# the below will be needed for a local go build
+export VERSION=<your_version, in 0.0.0 format>
+export MODULE_PATH=$(go list -m)
+export GOOS=${GOOS:-$(go env GOOS)}
+export GOARCH=${GOARCH:-$(go env GOARCH)}
+```
+
+Running `goreleaser` requires a Git tag to be populated, as that value is used to fill the plugin's version variable.
+
+To test a plugin, run `<path_to_the_plugin> describe` - that should return a JSON block with its _description_, e.g. `version`.
+
+The Packer plugin can be then validated with Packer by running `packer plugins install -path <path_to_the_generate_plugin> "github.com/zestia/digitalocean-image-lifecycle"` - it also does a `describe` but also confirms all is valid for a Packer plugin.
